@@ -1,3 +1,5 @@
+The developer will use **SQLDEBUG** to diagnose the root cause of the regression from the simplified test case produced by SQLMIN.
+
 SQLITE
 ------
 
