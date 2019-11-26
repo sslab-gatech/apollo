@@ -1,3 +1,5 @@
+**SQLMIN** will automatically distill the regression-activating SQL statements discovered by SQLFUZZ to their essence for filing regression reports. The user will send the regression report to the developers containing the query reduced by SQLMIN.
+
 # Minimizer command
 
 ``` bash
