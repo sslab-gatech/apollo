@@ -50,3 +50,7 @@ Cite
   address      = {Tokyo, Japan},
 }
 ```
+Contact
+-------
+
+Jinho Jung (jinho.jung@gatech.edu)
