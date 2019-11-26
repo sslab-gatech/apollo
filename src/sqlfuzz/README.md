@@ -1,3 +1,5 @@
+**SQLFUZZ** will perform feedback-driven mutational fuzzing to generate SQL statements and provide wider coverage of the SQL input domain. The key idea is to guide the fuzzing engine based on domain-specific feedback (i.e., probability for each clause in a SQL query), including runtime performance.
+
 # Sqlite Fuzzing
 
 ### 0) Setup the DBMS
