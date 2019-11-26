@@ -1,0 +1,7 @@
+
+OLD_DB_COMMIT = "736b53f57f"
+NEW_DB_COMMIT = "c9af2f71bf"
+
+REGRESSION_THRESHOLD = 2.0
+#LOGFILE = "bisect_log"
+CACHE_DIR = "sqlite_cache"

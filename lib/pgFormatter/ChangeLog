@@ -1,0 +1,429 @@
+October 08 2018 - v3.2
+
+This minor release adds support to PostgreSQL v11.0 new keywords
+and fixes several issues reported by users since last release.
+
+  * Add new PostgreSQL v11 keywords CALL, GROUPS, INCLUDE, OTHERS,
+    PROCEDURES, ROUTINE, ROUTINES, TIES.
+  * Add formatting of CREATE PUBLICATION.
+  * Add formatting of CREATE PROCEDURE code.
+  * Add formatting of ALTER PROCEDURE/ROUTINE, all on a single line.
+  * Add an indentation before VALUES of INSERT statements.
+
+Here is the complete list of changes and acknowledgments:
+
+  - Fix weird formatting on UNIQUE and PRIMARY KEY constraints in
+    CREATE TABLE statements. Thanks to Aaron Reisman for the report.
+  - Add operator for name convention,  ":=" was changed to "=>".
+    Thanks to snailshell-321 for the report.
+  - Fix missing formatting in SQL function with a single SELECT.
+  - Remove any new line in CALL statement.
+  - Never add newline after comma in ALTER statements.
+  - Prevent new line between ROW LEVEL SECURITY. Thanks to madflow
+    for the report.
+  - Update samples with last formatting changes.
+
+
+September 12 2018 - v3.1
+
+This minor release fixes several issues reported by users since six
+months.  This release also adds some improvements in code formatting.
+
+  * Function code in other language tha SQL or PLPGSQL is now kept
+    untouched.
+  * Make formatting output of function/procedure more compliant with
+    the pg_dump PostgreSQL format.
+  * Add information about atom package integration of pgFormatter.
+  * Add a "Clear code" button to reset text area and preserve
+    options changes.
+  * Add a logo to the project and change title and style of the CGI
+    part.
+  * Add application/sql content-type support in CGI mode.
+
+Here is the complete list of changes and acknowledgments:
+
+  - Add preprocessing to autodetect function language before entering
+    the tokenizer. If the language is not SQL or PLPGSQL the code is
+    kept untouched. Thanks to Philip Trauner for the report.
+  - Fix whatis entry of POD manpage. Thanks to Christoph Berg
+    for the patch.
+  - Add more regression tests.
+  - Remove newline between sub query and ON keyworks in JOIN clause.
+    Thanks to Christophe Courtois for the report.
+  - Fix indentation of multiline comments. Thanks to Philip Trauner
+    for the report.
+  - Fix missing newline after comma in some select statement,
+    especially from the online example.
+  - Fix formatting of query with multiple CTE. Thanks to Christophe
+    Courtois for the report.
+  - Fix plv8 syntax. Thanks to Aaron Reisman for the report.
+  - Fix undefined value crash when formatting query not terminated
+    by a semi colon. Thanks to David Luzar for the report.
+  - Add newline and indentation after WITH [RECURSIVE] ... (
+  - Fix bad indentation on case statements with 0 value. Thanks to
+    John Dimm for the report.
+  - Add regression test for sub queries followed by a join.
+  - Set the code separator for ex19.sql regression test.
+  - Fix indentation in join when previous instruction is a sub
+    select. Thanks to Christophe Courtois for the report.
+  - Fix indentdation of INNER JOINS when a previous JOIN use AND/OR
+    operator. Thanks to David Vogt for the report.
+  - Fix indentation problem with sub-select and UNION. Thanks to
+    Christophe Courtois for the report.
+  - Fix handling of newline after comma in CGI mode for insert
+    queries.
+  - Cleanup some code with comment addition.
+  - Prevent newline before BETWEEN operator.
+  - Fix JOIN formatting with AND/OR operator.
+  - Fix utf8 uncaught exception on CLI mode.
+  - Remove requirement to Perl v5.14 minimum.
+  - Avoid backward indentation in multiple JOIN clauses.
+  - Set default CGI maxlength to 100KB
+  - Fix unwanted indentation of WHEN in CASE statement.
+  - Remove use of UTF8 Perl pragma in CGI mode, it is not
+    recommended and it breaks CGI when not utf8 encoding.
+    Thanks to Christophe Courtois for the report.
+  - Fix PREPARE and INSERT|DELETE formatting. Thanks to Tom
+    Halson for the report.
+  - Fix formatting of WITH inside CREATE TABLE statement that was
+    wrongly formatting TIMESTAMP WITH TIME ZONE. Thanks to James
+    Bourne for the report.
+  - Fix uninitialized maxlength. Thanks to Steve Wainstead for
+    the report.
+  - Reactivate -m | --maxlength in CLI mode that was removed in
+    version 2.0. Thanks to Steve Wainstead for the report.
+
+Febuary 28 2018 - v3.0
+
+This major release fixes some issues reported by users during the
+last six months and adds several new features.
+
+  * Add colorization of comments.
+  * Add detection and colorization of user defined function in the SQL
+    code. Until now only PostgreSQL internal function was highlighted.
+  * Add new option -B | --comma-break and in CGI the checkbox
+    "New-line after comma (insert)" to force a newline after each
+    comma in INSERT statements, columns and values parts.
+  * Add command line option: -F | --format to be able to change the
+    output format in CLI mode. At now there is two possible format,
+    text the default or html. More format can be added in the future.
+  * Add support to all psql meta commands up to v1O.
+
+There is also some improvement in SQL code formatting. Here is the
+complete list of changes:
+
+  - Add information on how to customize CSS in CGI to change the HTML
+    style.
+  - Update documentation and add a pointer to the Node.js wrapper
+    written by Gajus Kuizinas.
+  - Remove program extention from $self->{program_name} used as title
+    of the CGI interface.
+  - Remove html_highlight_code() method to apply HTML formatting style
+    at token level instead of full SQL content like before. You just
+    have to call the $object->beautify() method, the HTML formatting
+    will be called internally if you have set the out format to HTML
+    with the call to $object->format('html'). This call is now done
+    internally by pg_format when it is called with the -F html option
+    or in CGI mode. This compatibility break justify a change of the
+    major version number.
+    
+    Note that this breaks backward compatibility if you are using your
+    own custom scripts. With a complete upgrade and the use of the
+    pg_format script and libraries everything should work as before.
+    
+  - Improve the CGI interface where the footer bar overlaps.
+  - The CGI library also support a new internal parameter/option
+    $self->{ 'colorize' } used to disable HTML output formatting
+    to avoid applying colorization to error messages returned by the
+    Perl package pgFormatter::CGI.pm
+  - Improve documentation of the Perl Package.
+  - Add detection of user defined function in the SQL code. Until now
+    only PostgreSQL known function was highlighted. Thanks to Gajus
+    Kuizinas for the feature request.
+  - Add option -B | --comma-break to documentation.
+  - Add regression test to CASE formating.
+  - Fix poorly formatted output when using CASE statements within
+    function params. Thanks to Kale Davis for the report.
+  - Add new option -B | --comma-break and in CGI the checkbox
+    "New-line after comma (insert)" to force a newline after each
+    comma in INSERT statements, columns and values parts. Thanks
+    to Troy Johnson for the feature request.
+  - Add sample of insert statement to test new -B option
+  - Improve formatting of multiple join.
+  - Add new regression test on JOIN formatting.
+  - Add command line option: -F | --format to be able to change the
+    output format in CLI mode. At now there is two possible format,
+    text the default or html. More format can be added in the future.
+    This allow embedded call to pg_format from any other program and
+    send a more sophisticated format than simple text to be able to
+    detect keywords, function and punctuation in that program.
+  - Add Hubert depesz Lubaczewski to the main authors list.
+  - Add simple regression test on psql meta command.
+  - Add support to all psql meta commands, thanks to Tobias Bussmann
+    the patch.
+  - Remove regexp pragma for negative look backward (use re '/aa';)
+    it is no more necessary since html_highlight_code() method is
+    gone. The requirement of minimal Perl version 5.14 should no
+    more needed but it is preserved for now. The demo isite is working
+    well on Perl 5.10.
+
+
+September 02 2017 - v2.1
+
+This minor release fixes several issues reported by users since four
+months.  This release also adds some improvements in code formatting.
+
+  - Add support to new psql meta-command from v10.
+  - Remove new line before ORDER BY with string_agg and group_concat
+    function call. Thanks to Huy Pham for the report.
+  - Fix CREATE TYPE format. Thanks to Fabian Zeindl for the report.
+  - Fix fix full outer join formatting. Thanks to Jakob Egger for the
+    report.
+  - Fix indentation in CTE. Thanks to Jakob Egger for the report.
+  - Add two command line option to defined where comma must appears
+    in a parameter list:
+    
+     -b | --comma-start: in a parameters list, start with a comma (see -e)
+     -e | --comma-end  : in a parameters list, end with a comma (default)
+    
+    The CGI interface adds a new checkbox to force comma at beginning.
+    Default is lines end with a comma. Thanks to fnwiya for the
+    feature request.
+  - Fix use of uninitialized value in pattern match. Thanks to Gajus
+    Kuizinas for the report.
+  - Fix missing space after a function name especially in ALTER
+    FUNCTION calls.
+  - Add sample to regression test on CTE, CREATE TYPE and dynamic code
+    formatting.
+  - Prevent dynamic code formatting. By default pgFormatter takes all
+    code between single quote as string constant and do not perform
+    any formatting on this code. It is common to use a string as
+    code separator to avoid doubling single quote in dynamic code
+    generation, in this case pgFormatter can fail to auto detect
+    the code separator. By default it will search for any string after
+    the EXECUTE keyword starting with dollar sign. If it can not auto
+    detect your code separator you can use the command line option -S
+    or --separator to set the code separator that must be used. Thanks
+    to Alvaro Herrera for the report.
+  - Fix undetected case of BEGIN keyword when lowercase.
+  - Add test case for GRANT and DISTINCT FROM formatting.
+  - Remove newline between DISTINCT and FROM. Thanks to Sebastian
+    Albert for the report.
+  - Fix GRANT formatting. Thanks to Vesa Karjalainen for the report.
+  - Make it possible to run pg_format via symlink. For example, if
+    pgFormatter is in /opt/pgFormatter and there is a symlink like
+    /usr/local/bin/pg_format -> /opt/pgFormatter/pg_format
+    then previous version wouldn't work when called via symlink, as
+    it would search for libs in /usr/local/bin/lib/, and not in
+    /opt/pgFormatter/lib.
+  - Move COALESCE from SQL keyword to SQL function to prevent new line
+    after comma in the parameters.
+
+May 07 2017 - v2.0
+
+This major release adds a plpgsql code beautifier. This makes pgFormatter
+the best free tool to rewrite and beautify any SQL and PLPGSQL code. This
+release also fixes several issues and adds lot of improvements in code
+formatting.
+
+    - Add PLPGSQL beautifier.
+    - Fix case sensitivity of plpgsql keywords when using the -u command line
+      option. Thanks to Hubert Depesz Lubaczewski for the report.
+    - Add regression tests script regress_test.pl, more test files and expected
+      results.
+    - Do not append newline before a concatenation operator.
+    - Fix unitialized variable issue and remove newline in insert statement
+      after a close parenthesis.
+    - Remove comment before HTML beautifier and restore them after to prevent
+      beautifying keywords in comments.
+    - Improve formatting of UPDATE and DELETE statement.
+    - Improve all DDL statements formatting.
+    - Only format functions when name is followed by an open parenthesis.
+    - Add support for AWS Redshift keywords. Thanks to cavanaug for the feature
+      request.
+    - Prevent new line after a comma in parameters function.
+    - Add LATERAL keyword.
+    - Remove new line between UNION and ALL.
+    - Add RETURNING as far left keyword.
+    - Fix some potential case sensitivity issues.
+    - Replace tabulation with space for better indentation.
+    - Prevent newline in USING clause of JOIN.
+    - Prevent newline after a closing parenthesis but before an operator.
+    - Prevent new line when a comma is followed by a quote
+
+January 23 2017 - v1.6
+
+This release fixes several issues and adds lot of improvements in
+query formatting.
+
+Command line option --placeholder or -p has been added to be able
+to set regex to find code that must not be formatted. For example,
+in query like:
+
+	SELECT * FROM projects WHERE projectnumber
+		IN <<internalprojects>> AND username = <<loginname>>;
+
+you may want pgFormatter to not interpret << and >> as bit-shift
+keywords and modify your code snippsets. You can use a Perl regular
+expression to instruct pgFormatter to keep some part of the query
+untouched. For example:
+
+        pg_format samples/ex9.sql -p '<<(?:.*)?>>'
+
+will not format the bit-shift like operators.
+
+Here is the complete list of changes:
+
+  - Improve SQL formatting by reducing space with parenthesis and
+    cast with ::.
+  - Add two sample file to test placeholder feature and WITH query.
+  - Fix missing newline after INNER JOIN. Thanks to Julien Rouhaud
+    for the report.
+  - Fix whitespace placed in between the E and the quote character.
+    Thanks to clijunky for the report.
+  - Fix lots of operators reported on issue #22. Thanks to Laurenz
+    Albe for the report and list of missing operators.
+  - Fix version number in lib/pgFormatter library files.
+  - Add -p | --placeholder command line option to prevent pgFormatter
+    to replace some part of the SQL queries. Thanks to jhelberg for
+    the feature request.
+  - Fix bad formatting with anonymized values in queries. Thanks to
+    Pilat66 for the report.
+
+October 17 2015 - v1.5
+
+This release fixes several issues and adds support to new keywords added in
+PostgreSQL 9.5. There's also a major code rewrite by Hubert depesz Lubaczewski,
+pg_format works as previously - handles both CGI and CLI interface, but you
+can get directly to whatever functionality you want by using pgFormatter::*
+modules.
+
+New beautified keywords are: BERNOULLI, CUBE, GROUPING SETS, SKIP LOCKED,
+LOGGED, POLICY, ROLLUP, TABLESAMPLE. And new functions are: jsonb_pretty,
+jsonb_set, pg_last_committed_xact, pg_xact_commit_timestamp.
+
+There is also a useful hint added to documentation to be able to format
+you SQL code from vi by adding a simple line to .vimrc. This hint is taken
+from David Fetter's blog : http://people.planetpostgresql.org/dfetter/index.php?/archives/78-Formatting!.html
+ 
+Here is the complete list of other changes:
+ 
+  - Add useful hint about formating in vi. Thanks to David Fetter for the hint.
+  - Prevent newline after open parenthesis and indent back after close when we have count(*) for example.
+  - Add test query with a backslash before a quote in samples/ex8.sql.
+  - Fix coloring string when the string contained a backslash before a quote. Thanks to Kevin Brannen for the patch.
+  - Add RETURNS keywords.
+  - Remove newline before the FOR keywords.
+  - Add BY to the list of PG keywords to be capitalized.
+  - Add new keywords from PostgreSQL 9.5.
+  - Reformat queries with FOR and USING, for example: CREATE POLICY policy_even_ids_only ON log FOR ALL TO PUBLIC USING (id % 2 = 0);
+  - Fix unescaped character in regex. Thanks to Tom Burnett for the patch.
+  - Fix wrong indentation with function that accept FROM clause. Thanks to Adrian Klaver and Alvaro Herrera for the report.
+  - Add more test samples about json operators.
+  - Add JSON #>> operator and sample. Thanks to Tom Burnett for the patch.
+  - Some more JSON operators. Thanks to Hubert depesz Lubaczewski for the patch.
+  - JSON operators have to be before normal operators as regexp will match first possible string, so -> will match - first, if it's before in tokenizer. Changing order solves the problem reports by Tom Burnett. Thanks to Hubert depesz Lubaczewski for the patch.
+  - Add new json/jsonb functions to list of pg functions.
+  - Add JSON operators. Thanks to Tom Burnett for the report.
+  - Fix anonymizing failure reported in issue #15. Thanks to Niklas Schmidtmer for the report.
+  - Add developer documentation. Thanks to Hubert depesz Lubaczewski for the patch.
+  - Fix Beautify.pm with perl 5.20. Thanks to Hubert depesz Lubaczewski for the patch.
+  - In Beautify.pm we were not considering the possibility of $last being empty in one condition inside a JOIN, and that gives an exception in perl 5.20. Thanks to Pablo Alvarez de Sotomayor Posadillo for the patch.
+  - Split into libraries and programs complete. Thanks to Hubert depesz Lubaczewski for the patch.
+
+
+April 18 2015 - v1.4
+
+This release fixes several issues and adds a useful anonymization option to
+be able to obfuscate all values in SQL queries, see option -a | --anonymize
+at command line or the corresponding checkbox in the CGI interface.
+
+  - Fix wrong reset position when a FROM clause is encountered in a subselect.
+    Thanks to Alvaro Herrera for the report.
+  - Add information on indentation to obtain a single line statement in CGI
+    interface.
+  - Remove unecessary first line in text mode and stdout output. Thanks to
+    David Fetter for the report.
+  - Automatically set default page for Reset all redirection. Thanks to
+    rimbault for the report.
+  - Add -a | --anonymize to obfuscate all values in SQL queries.
+  - Add checkbox to activation anonymize feature from CGI interface.
+  - Ran perlcritic on the code, and fixed most critical issues. Thanks to
+    Hubert depesz Lubaczewski for the patch.
+  - Make anonymization more useful. Thanks to Hubert depesz Lubaczewski for
+    the patch.
+  - Removed anonymisation of interval value (eg: 1 day) and to_char date format
+    (eg: DD/MM/YYYY HH24:MI:SS. Add a sample into ex4.sql file.
+  - Add REPLACE to the list of SQL keywords. Thanks to Alvaro Herrera for the
+    report.
+  - Prevent new line to be inserted before OR after a CREATE keyword to have
+    CREATE OR REPLACE on a single line.
+  - Fix additional spaces added in function body separator ($BODY$ was
+    rewritten as $ BODY $). Thanks to Alvaro Herrera for the report.
+  - Prevent (....)::interval to be replaced by the anonymizer.
+  - Add sample file with create function for testing purpose.
+
+
+Mars 19 2015 - v1.3
+
+This release fixes several issues and adds geometric operators. It is also
+possible now to format an sql script with one statement per line, which is
+the reverse of the standard used.
+
+  - Update Copyright year.
+  - Add geometric operators. Thanks to Devin Ben-Hur for the report.
+  - With one statement per line format, keep comment on separate line.
+    Thanks to Marco Schmidt for the patch.
+  - Allow pgFormatter to format an sql script with one statement per
+    line (no line-break, no indent, no comments) when -s | --space is
+    set to 0. Thanks to Marco Schmidt for the patch.
+  - Restrict regex matching in the ASCII range only with "use re /aa;".
+    Regex that has a look-ahead or look-behind AND uses the "i" modifier
+    need the "aa" modifiers too. This is for perl>=5.14. For perl<5.14
+    you will just have a warning about non existant re pragma. Thanks
+    to Kevin Brannen for the patch.
+  - Fix bug where capitalize makes functions disappear. Thanks to Vincent
+    Picavet for the report.
+  - Fix usage where obsolete -c option was still used.
+  - Add new sample file.
+  - Fix left joins that came out too far to the left and remove newline
+    after OUTER. Thanks to Kevin Brannen for the report.
+  - Applied typo patch of Felix Hummel to the POD documentation.
+  - Fix some typo on documentation. Thanks to Felix Hummel for the patch.
+  - Fix issue in formatting double quotes included into single quotes.
+    Thanks to Julien Rouhaud for the report.
+  - Fix issue with Perl 5.16 that do not allow "ss" inside look-behind
+    assertions. Thanks to Cedric for the report.
+
+January 11 2013 - v1.2
+
+This release add file upload capability in CGI context and better code
+formatting.
+
+  - Add HTML break before the footer in CGI context.
+  - Add missing SQL::Beautify paternity and update license part
+    of the documentation.
+  - Allow file upload in CGI context.
+  - Fix issue in formatting that prevent left back indentation
+    when major keywords were found. Thanks to Kevin Brannen for
+    the patch.
+  - Add information in code comments about external files in
+    CGI mode.
+  - Force the parser to not insert a new line after the SET
+    keyword when the query begin with it. This is to preserve the
+    single line with queries like SET client_encoding TO "utf8";
+  - Add new line after SET keyword to better format UPDATE queries.
+    Thanks to Pilat66 for the report.
+
+December 27 2012 - v1.1
+
+  - Preserve SQL code formatting when copy/paste.
+  - Removed coypright from CGI footer
+  - Modify links at the bottom of the CGI interface.
+  - Fix obsolete option in usage example.
+  - Limit SQL query size to $maxlength in CGI context and non interactive usage.
+
+December 22 2012 - v1.0
+
+  This is the initial release of pgFormatter
+

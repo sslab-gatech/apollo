@@ -1,0 +1,92 @@
+#+CATEGORY: sqlsmith
+
+* TODO-List
+** Driver
+*** TODO allow selecting/filtering schemas
+*** TODO report SQLSTATE
+
+need to patch libpqxx for that
+http://pqxx.org/development/libpqxx/ticket/219
+
+It's probably better to ditch libpqxx for the testing connection and
+use a custom class instead that abstracts different products
+
+** grammar
+*** TODO [#A] add proper identifier quoting
+sqlsmiths fails horribly with databases containing identifiers that
+require quoting.
+*** TODO [#C] Generate data for literal use in queries
+*** TODO Improve random generation
+- Add Attributes to rules so factories can pick candidates in a
+  weighted fashion.
+- This attribute could then also be used to blacklist productions for
+  incompatible RDBMs
+- Factor in graph level and AST node count in decisions productions
+  with high "fan-out".  This should be made customizeable.
+  E.g. target depth/target node count.  Or better use a single scale
+  factor instead
+** schema + type system
+*** TODO DTRT with arrays
+- review standard so we don't drift into non-standard pg stuff
+*** TODO composite/record types
+** relmodel
+*** TODO [#C] operations on Tuples
+instead of hacking up tuples inside productions it's more sensible to
+implement operators in relmodel.cc join() project() union() select()
+*** TODO Load samples at startup to have a pool of values for literals
+- how to do it in a reproducible fashion? TABLESAMPLE? ORDER BY?
+- maybe use atomic value subselects to fetch compatible values
+** Performance
+| revision      | queries/s | nodes | comment                                |
+|---------------+-----------+-------+----------------------------------------|
+| ee9c94f-dirty |       208 |     ? |                                        |
+| 4547909-dirty |       125 |    72 |                                        |
+| 7fa25c6-dirty |       156 |    54 |                                        |
+| 32a5d2a       |       188 |    54 |                                        |
+| 3a29a40       |       238 |    54 |                                        |
+| 57101e2       |       193 |    54 |                                        |
+| 52c5b92       |       212 |    37 |                                        |
+| efca827       |       205 |    37 | changed RNG to 64-Bit Mersenne Twister |
+| 9099e07       |       185 |    37 | coalesce production                    |
+
+: time ./sqlsmith --verbose --target='dbname=regression' --dry-run --max-queries=10000 > /dev/null
+
+** Postgresql Line Coverage
+
+| sqlsmith | overall | parser |
+|----------+---------+--------|
+| a4c1989  |    26.0 |   20.4 |
+| ee099e6  |    33.8 |   25.8 |
+| 231c88a  |   34.65 |   28.1 |
+| 7ffac2d  |    39.8 |   30.3 |
+| dad2ce0  |    34.5 |   29.5 |
+
+| combined testing    | overall | parser |
+|---------------------+---------+--------|
+| sqlsmith+make check |    65.1 |   80.4 |
+| make check          |      62 |   80.2 |
+| sqlsmith 7ffac2d    |    39.8 |   30.3 |
+
+Reference:
+|                   | overall | parser |
+|-------------------+---------+--------|
+| pg_ctl start/stop |     5.8 |    0.5 |
+| --max-queries=0   |    16.6 |   14.6 |
+
+: ./configure --enable-coverage
+:
+: make install
+: initdb /tmp/gcov
+: pg_ctl -D /tmp/gcov start
+: make installcheck
+: pg_ctl -D /tmp/gcov stop
+: make coverage-clean
+: pg_ctl -D /tmp/gcov start
+: # since 7ffac2d: 4 instances w/25000 each instead 1 instance w/10000 queries
+: sqlsmith --target='dbname=regression' --max-queries=25000 &
+: sqlsmith --target='dbname=regression' --max-queries=25000 &
+: sqlsmith --target='dbname=regression' --max-queries=25000 &
+: sqlsmith --target='dbname=regression' --max-queries=25000 &
+: wait
+: pg_ctl -D /tmp/gcov stop
+: make coverage-html

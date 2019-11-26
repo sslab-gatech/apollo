@@ -1,0 +1,6 @@
+sqlsmith
+sqlsmith-prob
+out
+*.pyc
+*.bak
+*.swp
