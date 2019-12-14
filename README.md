@@ -29,7 +29,7 @@ APOLLO consists of three components. Please refer the each README file for each 
 * SQLFuzz: 
 [Regression Fuzzing](src/sqlfuzz/README.md)
 
-* SQLFuzz: 
+* SQLMin: 
 [Query Size Minimizing](src/sqlmin/README.md)
 
 * SQLDebug: 
