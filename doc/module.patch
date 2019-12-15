@@ -1,0 +1,18 @@
+--- module.c    2019-03-02 18:17:42.000000000 +0000
++++ modulenew.c 2019-12-08 08:31:44.649157657 +0000
+@@ -300,13 +300,13 @@
+     {(char*)NULL, 0}
+ };
+
+-PyMODINIT_FUNC init_sqlite3(void)
++PyMODINIT_FUNC init_sqlite4(void)
+ {
+     PyObject *module, *dict;
+     PyObject *tmp_obj;
+     int i;
+
+-    module = Py_InitModule("_sqlite3", module_methods);
++    module = Py_InitModule("_sqlite4", module_methods);
+
+     if (!module ||
+         (pysqlite_row_setup_types() < 0) ||
