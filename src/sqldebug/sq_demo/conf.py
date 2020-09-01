@@ -1,6 +1,6 @@
 #sqlite3
-BINNEW = "sqlite3_compiled/7d9072b027"
-BINOLD = "sqlite3_compiled/95db5bd9fe"
+BINNEW = "../sqlite/bin/7d9072b027"
+BINOLD = "../sqlite/bin/95db5bd9fe"
 
 #sqlite4
 #BINNEW = "../sqlite/bin/9fb646f29c"

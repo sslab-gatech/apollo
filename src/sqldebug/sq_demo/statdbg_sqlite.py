@@ -224,13 +224,13 @@ class StatDbg(object):
         for i in xrange(min(number, len(sorted_dict))):
             if sorted_dict[i][1] < 0:
                 print sorted_dict[i]
-                print self.addr2line(sorted_dict[i][0], BINNEW)
+                #print self.addr2line(sorted_dict[i][0], BINNEW)
 
         print "\n\n[*] Result (TOP %d) from old binary" % number
         for i in xrange(min(number, len(sorted_dict))):
             if sorted_dict[i][1] < 0:
                 print sorted_dict[i]
-                print self.addr2line(sorted_dict[i][0], BINOLD)
+                #print self.addr2line(sorted_dict[i][0], BINOLD)
 
         if CONTEXT:
             for key in self.context.keys():
