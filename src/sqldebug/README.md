@@ -64,7 +64,7 @@ fossil open sqlite.fossil
   * sqlite 3.23.0: `736b53f57f`
   * sqlite 3.27.0: `c9af2f71bf`
 
-### 2) Some useful commands
+### 2) Some useful commands (if you need a manual analysis)
 
 ```bash
 ; dump fossil log
@@ -119,15 +119,25 @@ $ fossil checkout 736b53f57f
 
 * Capture the execution trace using
 
-## Statistical debugging
+```bash
+# manually capture one sql file
+$ dynamorio/build/bin64/drrun -c dynamorio/build/api/bin/libcbrtrace.so -- YOUR_SQLITE YOUR_DB.db <  YOUR_QUERY.sql
+```
 
-`To be updated`
-
-However, we added demo to show how it works.
+* Using provided script for user's convenience
 
 ```bash
-$ cd {REPO}/src/sqldebug/demo
-python statdbg_sqlite.py sqlite2
+$ to be updated
+
+```
+
+## Statistical debugging
+
+Please use the demo script and see how it works
+
+```bash
+$ cd demo
+$ python statdbg_sqlite.py sqlite2
 ```
 
 
