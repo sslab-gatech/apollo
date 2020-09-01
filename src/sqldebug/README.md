@@ -1,7 +1,53 @@
-The developer will use **SQLDEBUG** to diagnose the root cause of the regression from the simplified test case produced by SQLMIN.
+Overview
+--------
 
-SQLITE
-------
+![alt text](../../doc/sqldebug.png "Overview of SQLDebug")
+
+
+Prerequisite
+------------
+
+### Compile and Install DynamoRIO
+
+* Clone DynamoRIO repository
+
+```bash
+$ git clone https://github.com/DynamoRIO/dynamorio.git
+```
+
+* Patch file for compiling tracing library
+
+```bash
+# copy library
+$ cp dynamorio_patch/*.c dynamorio/api/samples/
+
+# patch dynamorio/api/samples/CMakeLists.txt: insert one line
+add_sample_client(cbrtrace    "cbrtrace.c;utils.c"    "drmgr;drx")
++ add_sample_client(cbrtrace2    "cbrtrace2.c;utils.c"    "drmgr;drx")
+```
+
+* Compile the dynamorio
+
+```bash
+# compile
+$ cd dynamorio
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make -j 4
+
+# check compiled library (libcbrtrace.so and libcbrtrace2.so)
+$ ls -al api/bin/*.so
+```
+
+* Example script to capture the trace
+
+```bash
+$ dynamorio/build/bin64/drrun -c dynamorio/build/api/bin/libcbrtrace.so -- YOUR_SQLITE YOUR_DB.db <  YOUR_QUERY.sql
+```
+
+Debugging SQLITE3
+-----------------
 
 ## Setup fossil Sqlite for bisect
 
@@ -15,9 +61,7 @@ fossil open sqlite.fossil
 ```
 
 * If we do regression fuzzing on `sqlite 3.23.0` and `sqlite 3.27.0`, we should find commit ID (you can use the following commands to find out)
-
   * sqlite 3.23.0: `736b53f57f`
-
   * sqlite 3.27.0: `c9af2f71bf`
 
 ### 2) Some useful commands
@@ -66,15 +110,20 @@ $ fossil checkout 736b53f57f
 
 * `-l` or `--logfile`: Optional, log filename
 
-## Dynamic Binary Instrumentation
+* **Important:** You SHOULD know which commit is related to the performence regression bug. After identify the commit number, you should compile two DBMS with debug symbol.
 
-`To be updated`
+  * #1: DBMS which initially introduces performance regression (e.g., SQLite_bad)
+  * #2: DBMS which lastly showed good performance (e.g., SQLite_good)
+
+## Extract execution trace thru DBI
+
+* Capture the execution trace using
 
 ## Statistical debugging
 
 `To be updated`
 
-However, we added demo to show how it works. 
+However, we added demo to show how it works.
 
 ```bash
 $ cd {REPO}/src/sqldebug/demo
@@ -82,8 +131,8 @@ python statdbg_sqlite.py sqlite2
 ```
 
 
-PostgreSQL
-----------
+Debugging PostgreSQL
+---------------------
 
 ## Setup test repo
 
@@ -101,7 +150,7 @@ PostgreSQL
 
 `To be updated`
 
-However, we added demo to show how it works. 
+However, we added demo to show how it works.
 
 ``` bash
 $ cd {REPO}/src/sqldebug/demo
