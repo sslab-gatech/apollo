@@ -1,0 +1,27 @@
+DB: test_bd
+DBMS: postgres
+DB_VER:
+  - 96
+  - 111
+DSN: '"dbi:Pg:host=127.0.0.1;port={PORT} ;user=postgres;password=mysecretpassword;database=test_bd"'
+FILEDB: null
+INIT: false
+MINIMIZER_DIR: /tmp/sqlmin
+MINIMUM_QUERY_TIME: 1.0e-05
+MIN_THRESHOLD: 0.3
+NEW_VER_PORT: 5435
+OLD_VER_PORT: 5432
+OUTDIR: /tmp/out
+PASSWD: mysecretpassword
+PREFIX: EXPLAIN ANALYZE
+PROBRESET: 120
+RUN_NEW: 'psql -h 127.0.0.1 -p {PORT} -U postgres -d test_bd -f '
+RUN_OLD: 'psql -h 127.0.0.1 -p {PORT} -U postgres -d test_bd -f '
+SQLSMITH_PORT: null
+SQLSMITH_TIMEOUT: 20
+THRESHOLD: 1.1
+TIMEOUT: 10
+USERNAME: postgres
+USE_MINIMIZER: true
+USE_PROB: false
+USE_TPCC: true

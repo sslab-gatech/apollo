@@ -1,4 +1,4 @@
-fuzz_log_pg
-fuzz_log_sq
-out
-outs
+fuzz_log_*
+out*
+*.sql_reduced
+

@@ -1,0 +1,25 @@
+DB: test_bd
+DBMS: sqlite
+DB_VER:
+  - 318
+  - 327
+DSN: file:/data/sslab/db-regression-fuzz/src/sqlfuzz/configuration/benchmark/tpcc_sqlite.db?mode=ro
+FILEDB: /data/sslab/db-regression-fuzz/src/sqlfuzz/configuration/benchmark/tpcc_sqlite.db
+INIT: false
+MINIMIZER_DIR: /tmp/sqlmin
+MINIMUM_QUERY_TIME: 1.0e-05
+MIN_THRESHOLD: 0.3
+OUTDIR: /tmp/out
+PASSWD: null
+PREFIX: ''
+PROBRESET: 120
+RUN_NEW: null
+RUN_OLD: null
+SQLSMITH_PORT: null
+SQLSMITH_TIMEOUT: 20
+THRESHOLD: 2
+TIMEOUT: 10
+USERNAME: null
+USE_MINIMIZER: true
+USE_PROB: false
+USE_TPCC: true
