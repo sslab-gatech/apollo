@@ -1,16 +1,16 @@
 
 `Apollo` requires two version of DBMSs (e.g., old and latest version of sqlite).
 In this document, we will guide how to install two version of them using
-`sqlite` and `postgres`. 
+`sqlite` and `postgres`.
 
-# 1. SQLITE (as a python module)
+# 1. Two versions of SQLITE (as a python module)
 
 In this example, we will make two sqlite module for python.
 * Test environment
   * Ubuntu 18.04.3 64bit
   * python 2.7.16
 
-At the end, we will install two modules 
+At the end, we will install two modules
 ```
 1) sqlite3 (old version: 3.18.0, 2017)
 2) sqlite4 (new version: 3.27.0, 2019)
@@ -78,8 +78,8 @@ $ sudo cp libsqlite3.so.3.18 /usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6
 $ wget https://www.python.org/ftp/python/2.7.16/Python-2.7.16.tgz
 $ tar xzvf Python-2.7.16.tgz
 $ cd Python-2.7.16
-$ vim Modules/_sqlite/module.c  
-  => modify 
+$ vim Modules/_sqlite/module.c
+  => modify
     PyMODINIT_FUNC init_sqlite3(void)
     Py_InitModule("_sqlite3", module_methods)
      to
@@ -122,14 +122,14 @@ print sqlite4.sqlite_version_info
 
 # 2. Two versions of PostgreSQL
 
-In this example, we will show how to set up two version 
-of PostgreSQL in one machine. 
+In this example, we will show how to set up two version
+of PostgreSQL in one machine.
 
-At the end of the example, you will install latest version 
+At the end of the example, you will install latest version
 of `PostgreSQL 11` (port 5435) and `PostgreSQL 9.6` (port 5432).
 
 
-### 1) Install Postgres using APT 
+### 1) Install Postgres using APT
 
 * PostgreSQL 11 and 9.6
 
@@ -150,10 +150,10 @@ $ sudo pg_ctlcluster 9.6 main stop
 $ sudo pg_ctlcluster 11 main stop
 
 # modify port numbers
-$ sudo vim /etc/postgresql/11/main/postgresql.conf 
+$ sudo vim /etc/postgresql/11/main/postgresql.conf
   => modify port number to 5435
 
-$ sudo vim /etc/postgresql/9.6/main/postgresql.conf 
+$ sudo vim /etc/postgresql/9.6/main/postgresql.conf
   => modify port number to 5432
 
 # start services
@@ -171,16 +171,34 @@ $ netstat -napt |grep "5435\|5432"
 $ sudo -u postgres createuser -p 5432 -s $(whoami); createdb -p 5432 $(whoami)
 $ sudo -u postgres createuser -p 5435 -s $(whoami); createdb -p 5435 $(whoami)
 
-# Set password
+# Set password for v9.6
 $ sudo -i -u postgres
 $ psql -p 5432
-=# ALTER USER postgres PASSWORD 'mysecretpassword';
+postgres=# ALTER USER postgres PASSWORD 'mysecretpassword';
+postgres=# exit
 
+# Set password for v11
 $ psql -p 5435
-=# ALTER USER postgres PASSWORD 'mysecretpassword';
+postgres=# ALTER USER postgres PASSWORD 'mysecretpassword';
+postgres=# exit
 ```
 
-***
+### 4) Import test DB
+
+* User can use own DB for the fuzzing
+* If user wants to use pre-defined TPCC-C benchmark, please follow the below process
+
+``` bash
+# Set up DB for v9.6 (remove DB first if necessary)
+$ PGPASSWORD=mysecretpassword psql -h 127.0.0.1 -p 5432 -U postgres -c "drop database test_bd;"
+$ PGPASSWORD=mysecretpassword psql -h 127.0.0.1 -p 5432 -U postgres -c "create database test_bd;"
+$ PGPASSWORD=mysecretpassword psql -h 127.0.0.1 -p 5432 -U postgres -d test_bd -f src/sqlfuzz/benchmar/tpcc_host.pgsql
+
+# Set up DB for v11 (remove DB first if necessary)
+$ PGPASSWORD=mysecretpassword psql -h 127.0.0.1 -p 5435 -U postgres -c "drop database test_bd;"
+$ PGPASSWORD=mysecretpassword psql -h 127.0.0.1 -p 5435 -U postgres -c "create database test_bd;"
+$ PGPASSWORD=mysecretpassword psql -h 127.0.0.1 -p 5435 -U postgres -d test_bd -f src/sqlfuzz/benchmar/tpcc_host.pgsql
+```
 
 # 3. Build SqlSmith and SqlSmith-prob
 
