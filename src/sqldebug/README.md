@@ -127,7 +127,7 @@ $ dynamorio/build/bin64/drrun -c dynamorio/build/api/bin/libcbrtrace.so -- YOUR_
 * Using provided script for user's convenience
 
 ```bash
-$ to be updated
+# to be updated
 
 ```
 
@@ -136,8 +136,11 @@ $ to be updated
 Please use the demo script and see how it works
 
 ```bash
-$ cd demo
-$ python statdbg_sqlite.py sqlite2
+# run and get the important predicates
+$ cd sq_demo
+$ python statdbg_sqlite.py sqlite3
+
+# NOTE: we didn't provide the original binary yet so displayed report does not include source code information
 ```
 
 
