@@ -40,7 +40,7 @@ $ make -j 4
 $ ls -al api/bin/*.so
 ```
 
-* Example script to capture the trace
+* Example command to capture the trace
 
 ```bash
 $ dynamorio/build/bin64/drrun -c dynamorio/build/api/bin/libcbrtrace.so -- YOUR_SQLITE YOUR_DB.db <  YOUR_QUERY.sql

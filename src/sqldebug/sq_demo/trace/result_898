@@ -1,0 +1,18 @@
+[*] Result (TOP 5)
+('0x7f76a3', -0.8888888888888888)
+('0x5fd077', -0.32432432432432434)
+('0x5fd548', -0.32432432432432434)
+('0x71e786', -0.28)
+('0x7f76b2', -0.27586206896551724)
+
+0x00000000007f76a3
+/home/postgres/postgresql-11.1/src/backend/optimizer/util/clauses.c:392
+0x00000000005fd077
+/home/postgres/postgresql-11.1/src/backend/parser/parse_func.c:1404
+0x00000000005fd548
+/home/postgres/postgresql-11.1/src/backend/parser/parse_func.c:1614
+0x000000000071e786
+/home/postgres/postgresql-11.1/src/backend/executor/nodeResult.c:117
+0x00000000007f76b2
+/home/postgres/postgresql-11.1/src/backend/optimizer/util/clauses.c:391
+
